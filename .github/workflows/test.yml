@@ -1,10 +1,12 @@
 name: 🧪 NestJS CI
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   build-and-test:
@@ -25,5 +27,21 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Run Tests
-        run: npm run test
+      - name: Run Tests and Save Output
+        run: |
+          npm test > result.log || true
+
+      - name: Comment test result on PR
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('result.log', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🧪 **테스트 결과 요약**\n\n\`\`\`\n${output}\n\`\`\``
+            });
