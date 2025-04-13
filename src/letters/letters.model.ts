@@ -1,5 +1,5 @@
 export interface Letter {
-  letterIdx: string;
+  letterId: string;
   letterContent: string; // 내용
   letterColor: number; // 색깔
   letterShape: number; // 모양

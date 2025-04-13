@@ -11,11 +11,15 @@ export class LettersService {
     return this.letters;
   }
 
+  getLetterById(letterId: string): Letter {
+    return this.letters.find((letter) => letter.letterId === letterId);
+  }
+
   createLetter(createLetterDto: CreateLetterDto): Letter {
     const { letterContent } = createLetterDto; // 여러개면 옆에 , 쓰고 쭈욱 작성 ex) letterContent, letterColor, ...
 
     const letter: Letter = {
-      letterIdx: uuid(), // 실제론 DB에서 생성되거나 UUID 등으로 대체
+      letterId: uuid(), // 실제론 DB에서 생성되거나 UUID 등으로 대체
       letterContent,
       letterColor: 1,
       letterShape: 1, // 기본 값 설정

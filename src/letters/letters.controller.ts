@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { LettersService } from './letters.service';
 import { Letter } from './letters.model';
 import { CreateLetterDto } from './dto/create-letter.dto';
@@ -11,6 +11,11 @@ export class LettersController {
   getAllLetters(): Letter[] {
     console.log(this.lettersService.getAllLetters());
     return this.lettersService.getAllLetters();
+  }
+
+  @Get('/:letterId')
+  GetByLetterId(@Param('letterId') letterId: string): Letter {
+    return this.lettersService.getLetterById(letterId);
   }
 
   @Post()
