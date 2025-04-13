@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Letter, letterScope } from './letters.model';
 import { v1 as uuid } from 'uuid';
+import { CreateLetterDto } from './dto/create-letter.dto';
 
 @Injectable()
 export class LettersService {
@@ -10,7 +11,9 @@ export class LettersService {
     return this.letters;
   }
 
-  createLetter(letterContent: string): Letter {
+  createLetter(createLetterDto: CreateLetterDto): Letter {
+    const { letterContent } = createLetterDto; // 여러개면 옆에 , 쓰고 쭈욱 작성 ex) letterContent, letterColor, ...
+
     const letter: Letter = {
       letterIdx: uuid(), // 실제론 DB에서 생성되거나 UUID 등으로 대체
       letterContent,

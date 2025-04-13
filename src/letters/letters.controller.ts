@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { LettersService } from './letters.service';
 import { Letter } from './letters.model';
+import { CreateLetterDto } from './dto/create-letter.dto';
 
 @Controller('letters')
 export class LettersController {
@@ -13,8 +14,8 @@ export class LettersController {
   }
 
   @Post()
-  createLetter(@Body('letterContent') letterContent: string): Letter {
-    console.log(letterContent);
-    return this.lettersService.createLetter(letterContent);
+  createLetter(@Body() createLetterDto: CreateLetterDto): Letter {
+    console.log(createLetterDto);
+    return this.lettersService.createLetter(createLetterDto);
   }
 }
