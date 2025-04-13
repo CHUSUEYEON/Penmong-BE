@@ -54,3 +54,16 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# TypeScript
+*.tsbuildinfo
+
+# Test Results
+test-results/
+
+# GitHub Actions
+result.log
+
+# npm/Tool cache
+.cache/
+.npm/
