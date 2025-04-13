@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { LettersService } from './letters.service';
 import { Letter } from './letters.model';
 import { CreateLetterDto } from './dto/create-letter.dto';
@@ -14,7 +14,7 @@ export class LettersController {
   }
 
   @Get('/:letterId')
-  GetByLetterId(@Param('letterId') letterId: string): Letter {
+  getByLetterId(@Param('letterId') letterId: string): Letter {
     return this.lettersService.getLetterById(letterId);
   }
 
@@ -22,5 +22,10 @@ export class LettersController {
   createLetter(@Body() createLetterDto: CreateLetterDto): Letter {
     console.log(createLetterDto);
     return this.lettersService.createLetter(createLetterDto);
+  }
+
+  @Delete('/:letterId')
+  deleteLetter(@Param('letterId') letterId: string): void {
+    this.lettersService.deleteLetter(letterId);
   }
 }

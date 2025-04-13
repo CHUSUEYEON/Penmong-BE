@@ -34,4 +34,10 @@ export class LettersService {
     this.letters.push(letter);
     return letter;
   }
+
+  deleteLetter(letterId: string): void {
+    this.letters = this.letters.filter(
+      (letter) => letter.letterId !== letterId,
+    );
+  }
 }
