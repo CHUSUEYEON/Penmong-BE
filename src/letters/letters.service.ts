@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Letter, letterScope } from './letters.model';
 import { v1 as uuid } from 'uuid';
 import { CreateLetterDto } from './dto/create-letter.dto';
+import { throws } from 'assert';
 
 @Injectable()
 export class LettersService {
@@ -12,7 +13,10 @@ export class LettersService {
   }
 
   getLetterById(letterId: string): Letter {
-    return this.letters.find((letter) => letter.letterId === letterId);
+    const found = this.letters.find((letter) => letter.letterId === letterId);
+    if (!found)
+      throw new NotFoundException(`Can't find letter wieh id ${letterId}`);
+    return found;
   }
 
   createLetter(createLetterDto: CreateLetterDto): Letter {
@@ -36,8 +40,9 @@ export class LettersService {
   }
 
   deleteLetter(letterId: string): void {
+    const found = this.getLetterById(letterId);
     this.letters = this.letters.filter(
-      (letter) => letter.letterId !== letterId,
+      (letter) => letter.letterId !== found.letterId,
     );
   }
 }

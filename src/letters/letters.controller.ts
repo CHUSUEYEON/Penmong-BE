@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { LettersService } from './letters.service';
 import { Letter } from './letters.model';
 import { CreateLetterDto } from './dto/create-letter.dto';
@@ -19,6 +28,7 @@ export class LettersController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createLetter(@Body() createLetterDto: CreateLetterDto): Letter {
     console.log(createLetterDto);
     return this.lettersService.createLetter(createLetterDto);
