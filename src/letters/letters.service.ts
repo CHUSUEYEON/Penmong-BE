@@ -1,48 +1,43 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Letter, letterScope } from './letters.model';
-import { v1 as uuid } from 'uuid';
+// import { v1 as uuid } from 'uuid';
 import { CreateLetterDto } from './dto/create-letter.dto';
 import { throws } from 'assert';
+import { LetterRepository } from './letters.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Letter } from './letters.entity';
 
 @Injectable()
 export class LettersService {
-  private letters: Letter[] = [];
+  //  의존성 주입(생성자 방법)
+  constructor(private readonly letterRepository: LetterRepository) {}
 
-  getAllLetters(): Letter[] {
-    return this.letters;
-  }
+  // 상세 게시물 조회
+  async getLetterById(letterId: number): Promise<Letter> {
+    const found = await this.letterRepository.getLetterById(letterId);
 
-  getLetterById(letterId: string): Letter {
-    const found = this.letters.find((letter) => letter.letterId === letterId);
-    if (!found)
+    if (!found || found.letterDeletedAt !== null)
       throw new NotFoundException(`Can't find letter wieh id ${letterId}`);
     return found;
   }
 
-  createLetter(createLetterDto: CreateLetterDto): Letter {
-    const { letterContent } = createLetterDto; // 여러개면 옆에 , 쓰고 쭈욱 작성 ex) letterContent, letterColor, ...
-
-    const letter: Letter = {
-      letterId: uuid(), // 실제론 DB에서 생성되거나 UUID 등으로 대체
-      letterContent,
-      letterColor: 1,
-      letterShape: 1, // 기본 값 설정
-      letterFile: 0, // 파일 없음
-      letterIsReported: false, // 기본값 신고 X
-      letterScope: letterScope.GLOBAL, // 기본 공개범위
-      letterIsPublic: true, // 전체 공개 기본
-      letterCreatedAt: new Date().toISOString(),
-      letterDeletedAt: null, // 아직 삭제 안 됨
-    };
-
-    this.letters.push(letter);
-    return letter;
+  // 전체 게시물 조회
+  getAllLetters(): Promise<Letter[]> {
+    return this.letterRepository.getAllLetters();
   }
 
-  deleteLetter(letterId: string): void {
-    const found = this.getLetterById(letterId);
-    this.letters = this.letters.filter(
-      (letter) => letter.letterId !== found.letterId,
-    );
+  // 게시물 생성
+  createLetter(createLetterDto: CreateLetterDto): Promise<Letter> {
+    return this.letterRepository.createLetter(createLetterDto);
+  }
+
+  // 게시물 삭제
+  async deleteLetter(letterId: number): Promise<void> {
+    const letter = await this.letterRepository.getLetterById(letterId); // 해당 게시물 찾기
+
+    if (!letter || letter.letterDeletedAt !== null) {
+      throw new NotFoundException(`Can't find letter with id ${letterId}`);
+    }
+
+    await this.letterRepository.deleteLetter(letter);
   }
 }
