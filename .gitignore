@@ -67,3 +67,6 @@ result.log
 # npm/Tool cache
 .cache/
 .npm/
+
+# TypeORM 
+src/configs/typeorm.config.ts
