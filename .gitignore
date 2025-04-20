@@ -68,5 +68,5 @@ result.log
 .cache/
 .npm/
 
-# TypeORM 
-src/configs/typeorm.config.ts
+# env
+.env
