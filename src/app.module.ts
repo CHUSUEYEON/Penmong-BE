@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { LettersModule } from './letters/letters.module';
+import { LettersModule } from './letter/letter.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './configs/typeorm.config';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -11,6 +13,8 @@ import { ConfigModule } from '@nestjs/config';
     }),
     TypeOrmModule.forRoot(typeORMConfig),
     LettersModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}
