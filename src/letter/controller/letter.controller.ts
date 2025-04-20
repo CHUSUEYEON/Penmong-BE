@@ -9,9 +9,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { LettersService } from '../service/letters.service';
+import { LettersService } from '../service/letter.service';
 import { CreateLetterDto } from '../dto/create-letter.dto';
-import { Letter } from '../model/letters.entity';
+import { Letter } from '../model/letter.entity';
 import {
   ApiBody,
   ApiOperation,
