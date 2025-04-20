@@ -1,4 +1,4 @@
 export enum LetterScope {
-  GLOBAL = 'GLOBAL',
+  PUBLIC = 'PUBLIC',
   ROOM = 'ROOM',
 }
