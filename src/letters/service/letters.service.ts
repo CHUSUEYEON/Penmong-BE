@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 // import { v1 as uuid } from 'uuid';
-import { CreateLetterDto } from './dto/create-letter.dto';
+import { CreateLetterDto } from '../dto/create-letter.dto';
 import { throws } from 'assert';
-import { LetterRepository } from './letters.repository';
+import { LetterRepository } from '../repository/letters.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Letter } from './letters.entity';
+import { Letter } from '../model/letters.entity';
 
 @Injectable()
 export class LettersService {
-  //  의존성 주입(생성자 방법)
+  //  의존성 주입(생성자)
   constructor(private readonly letterRepository: LetterRepository) {}
 
   // 상세 게시물 조회

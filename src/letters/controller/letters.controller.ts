@@ -9,10 +9,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { LettersService } from './letters.service';
-import { CreateLetterDto } from './dto/create-letter.dto';
-import { Letter } from './letters.entity';
+import { LettersService } from '../service/letters.service';
+import { CreateLetterDto } from '../dto/create-letter.dto';
+import { Letter } from '../model/letters.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Letter')
 @Controller('letters')
 export class LettersController {
   constructor(private lettersService: LettersService) {}

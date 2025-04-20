@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Letter } from './letters.entity';
-import { CreateLetterDto } from './dto/create-letter.dto';
+import { Letter } from '../model/letters.entity';
+import { CreateLetterDto } from '../dto/create-letter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
