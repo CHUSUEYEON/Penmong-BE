@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Tests and Save Output
         run: |
-          npm test > result.log || true
+          npm test > result.log || echo "테스트 결과 없음" > result.log
 
       - name: Comment test result on PR
         if: always()
@@ -38,7 +38,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const output = fs.readFileSync('result.log', 'utf8');
+            const filePath = 'result.log';
+            let output = '⚠️ result.log 파일을 찾을 수 없습니다.';
+            if (fs.existsSync(filePath)) {
+              output = fs.readFileSync(filePath, 'utf8');
+            }
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
