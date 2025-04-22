@@ -4,10 +4,12 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { UserLoginType } from './user-loginType.enum';
 
 @Entity()
+@Unique(['userId', 'userNickname'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   userIdx: number;
