@@ -13,7 +13,7 @@ export class Letter extends BaseEntity {
   letterId: number;
 
   @Column()
-  letterContent: String;
+  letterContent: string;
 
   @Column()
   letterColor: number;
@@ -28,12 +28,15 @@ export class Letter extends BaseEntity {
   letterDeletedAt: Date;
 
   @Column({ nullable: true })
-  letterFile: String;
+  letterFile: string;
 
   @Column()
   letterIsReported: boolean; //신고여부
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: LetterScope,
+  })
   letterScope: LetterScope; // 공개범위
 
   @Column()

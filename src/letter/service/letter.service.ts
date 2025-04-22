@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 // import { v1 as uuid } from 'uuid';
 import { CreateLetterDto } from '../dto/create-letter.dto';
 import { throws } from 'assert';
-import { LetterRepository } from '../repository/letters.repository';
+import { LetterRepository } from '../repository/letter.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Letter } from '../model/letters.entity';
+import { Letter } from '../model/letter.entity';
 
 @Injectable()
 export class LettersService {
