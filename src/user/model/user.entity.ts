@@ -33,7 +33,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   userDeletedAt: Date;
 
-  @Column()
+  @Column({ default: false })
   isAdmin: boolean;
 
   @Column({ nullable: true })
@@ -42,6 +42,7 @@ export class User extends BaseEntity {
   @Column({
     type: 'enum',
     enum: UserLoginType,
+    default: 'LOCAL',
   })
   userLoginType: UserLoginType;
 
