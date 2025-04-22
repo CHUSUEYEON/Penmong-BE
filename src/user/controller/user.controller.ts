@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { User } from '../model/user.entity';
 import { ApiTags } from '@nestjs/swagger';
@@ -10,7 +10,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  signup(@Body() createUserDto: CreateUserDto): Promise<User> {
+  signup(@Body(ValidationPipe) createUserDto: CreateUserDto): Promise<User> {
     console.log(createUserDto);
     return this.userService.signup(createUserDto);
   }
