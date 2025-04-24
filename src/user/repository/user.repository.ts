@@ -11,32 +11,21 @@ export class UserRepository {
     private readonly userRepo: Repository<User>,
   ) {}
 
+  async existsByUserId(userId: string): Promise<boolean> {
+    return this.userRepo.existsBy({ userId });
+  }
+
+  async existsByUserNickname(userNickname: string): Promise<boolean> {
+    return this.userRepo.existsBy({ userNickname });
+  }
+
   // 유저 조회
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { userId, userNickname, userPassword, userPwQuestion, userPwAnswer } =
-      createUserDto;
+  async createUser(user: CreateUserDto): Promise<User> {
+    const newUser = this.userRepo.create(user);
 
-    if (await this.userRepo.existsBy({ userId: createUserDto.userId }))
-      throw new ConflictException('이미 존재하는 아이디입니다.');
+    await this.userRepo.save(newUser);
 
-    if (
-      await this.userRepo.existsBy({ userNickname: createUserDto.userNickname })
-    )
-      throw new ConflictException('이미 존재하는 닉네임입니다.');
-    try {
-      const user = this.userRepo.create({
-        userId,
-        userNickname,
-        userPassword,
-        userPwQuestion,
-        userPwAnswer,
-      });
-
-      await this.userRepo.save(user);
-      return user;
-    } catch (error) {
-      console.log(error);
-    }
+    return newUser;
   }
 }
