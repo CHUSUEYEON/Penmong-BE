@@ -11,7 +11,6 @@ export class UserController {
 
   @Post()
   signup(@Body(ValidationPipe) createUserDto: CreateUserDto): Promise<User> {
-    console.log(createUserDto);
     return this.userService.signup(createUserDto);
   }
 }
