@@ -71,4 +71,28 @@ export class AuthService {
       );
     }
   }
+
+  async logout(refreshToken: string): Promise<void> {
+    try {
+      if (!refreshToken)
+        throw new UnauthorizedException('리프레쉬 토큰이 없습니다.');
+
+      const payload = this.jwtService.verify(refreshToken, {
+        secret: process.env.JWT_SECRET,
+      });
+
+      const user = await this.userRepository.findByUserId(payload.userId);
+
+      if (!user) throw new UnauthorizedException('유저를 찾을 수 없습니다.');
+
+      // 리프레쉬 토큰 초기화
+      user.userRefreshToken = null;
+      await this.userRepository.saveRefreshToken(user);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '로그아웃 중 문제가 발생했습니다.',
+      );
+    }
+  }
 }
