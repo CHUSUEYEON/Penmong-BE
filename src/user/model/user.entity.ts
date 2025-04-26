@@ -33,6 +33,10 @@ export class User extends BaseEntity {
   @Column()
   userPwAnswer: string;
 
+  @Column({ nullable: true })
+  @Exclude()
+  userRefreshToken: string;
+
   @CreateDateColumn()
   userCreatedAt: Date;
 
@@ -40,7 +44,7 @@ export class User extends BaseEntity {
   userDeletedAt: Date;
 
   @Column({ default: false })
-  isAdmin: boolean;
+  userIsAdmin: boolean;
 
   @Column({ nullable: true })
   userSocialID: string;
