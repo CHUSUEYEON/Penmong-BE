@@ -6,6 +6,7 @@ import { UserRepository } from './repository/user.repository';
 import { UserService } from './service/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from 'src/jwt/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PassportModule } from '@nestjs/passport';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [UserController],
-  providers: [UserRepository, UserService],
+  providers: [UserRepository, UserService, JwtStrategy],
+  exports: [JwtStrategy, PassportModule],
 })
 export class UserModule {}

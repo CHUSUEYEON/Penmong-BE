@@ -11,7 +11,7 @@ export class UserRepository {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  async existsByUserId(userId: string): Promise<User> {
+  async findByUserId(userId: string): Promise<User> {
     return this.userRepo.findOneBy({ userId });
   }
 
