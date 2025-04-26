@@ -12,6 +12,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { AuthCredentialsDto } from '../dto/authCredentials.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../decorator/get-user.decorator';
 
 @ApiTags('User')
 @Controller('users')
@@ -32,7 +33,7 @@ export class UserController {
 
   @UseGuards(AuthGuard())
   @Post('/test')
-  test(@Req() req) {
-    console.log(req);
+  test(@GetUser() user: User) {
+    console.log(user);
   }
 }
