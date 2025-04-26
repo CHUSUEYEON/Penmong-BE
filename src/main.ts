@@ -13,6 +13,12 @@ async function bootstrap() {
 
   app.use(cookieParser()); // 쿠키 미들웨어 설정
 
+  app.enableCors({
+    //cors 설정
+    origin: true,
+    credentials: true,
+  });
+
   await app.listen(3000);
 }
 bootstrap();
