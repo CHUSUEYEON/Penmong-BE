@@ -21,9 +21,11 @@ export class UserRepository {
 
   async createUser(user: CreateUserDto): Promise<User> {
     const newUser = this.userRepo.create(user);
-
     await this.userRepo.save(newUser);
-
     return newUser;
+  }
+
+  async saveRefreshToken(user: User): Promise<void> {
+    await this.userRepo.save(user);
   }
 }
