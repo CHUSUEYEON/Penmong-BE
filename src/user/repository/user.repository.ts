@@ -11,15 +11,13 @@ export class UserRepository {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  async existsByUserId(userId: string): Promise<boolean> {
-    return this.userRepo.existsBy({ userId });
+  async existsByUserId(userId: string): Promise<User> {
+    return this.userRepo.findOneBy({ userId });
   }
 
   async existsByUserNickname(userNickname: string): Promise<boolean> {
     return this.userRepo.existsBy({ userNickname });
   }
-
-  // 유저 조회
 
   async createUser(user: CreateUserDto): Promise<User> {
     const newUser = this.userRepo.create(user);
