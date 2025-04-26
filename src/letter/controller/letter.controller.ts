@@ -26,7 +26,7 @@ export class LettersController {
   constructor(private lettersService: LettersService) {}
 
   @ApiOperation({
-    summary: '전체 편지를 조회하는 api입니다.',
+    summary: '전체 편지를 조회하는 API입니다.',
   })
   @Get()
   getAllLetters(): Promise<Letter[]> {
@@ -35,7 +35,7 @@ export class LettersController {
   }
 
   @ApiOperation({
-    summary: '상세 편지 하나를 조회하는 api입니다.',
+    summary: '상세 편지 하나를 조회하는 API입니다.',
   })
   @ApiParam({
     name: 'letterId',
@@ -50,10 +50,10 @@ export class LettersController {
   }
 
   @ApiOperation({
-    summary: '편지를 생성하는 api입니다.',
+    summary: '편지를 생성하는 API입니다.',
   })
   @ApiBody({
-    description: '편지 생성 body',
+    description: '편지 생성 시 필요한 데이터',
     type: CreateLetterDto,
   })
   @Post()
@@ -64,7 +64,7 @@ export class LettersController {
   }
 
   @ApiOperation({
-    summary: '편지를 삭제하는 api입니다.',
+    summary: '편지를 삭제하는 API입니다.',
   })
   @ApiParam({
     name: 'letterId',

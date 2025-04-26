@@ -4,10 +4,13 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { UserLoginType } from './user-loginType.enum';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity()
+@Unique(['userId', 'userNickname'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   userIdx: number;
@@ -18,12 +21,15 @@ export class User extends BaseEntity {
   @Column()
   userNickname: string;
 
+  @Exclude()
   @Column()
   userPassword: string;
 
+  @Exclude()
   @Column()
   userPwQuestion: string;
 
+  @Exclude()
   @Column()
   userPwAnswer: string;
 
@@ -33,7 +39,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   userDeletedAt: Date;
 
-  @Column()
+  @Column({ default: false })
   isAdmin: boolean;
 
   @Column({ nullable: true })
@@ -42,6 +48,7 @@ export class User extends BaseEntity {
   @Column({
     type: 'enum',
     enum: UserLoginType,
+    default: 'LOCAL',
   })
   userLoginType: UserLoginType;
 
