@@ -19,6 +19,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { CommonResponseDto } from 'src/common/dto/common-response.dto';
 
 @ApiTags('Letter') // 스웨거에 태그 생성
 @Controller('letters')
@@ -29,9 +30,9 @@ export class LettersController {
     summary: '전체 편지를 조회하는 API입니다.',
   })
   @Get()
-  getAllLetters(): Promise<Letter[]> {
-    console.log(this.lettersService.getAllLetters());
-    return this.lettersService.getAllLetters();
+  async getAllLetters(): Promise<CommonResponseDto<Letter[]>> {
+    const letters = await this.lettersService.getAllLetters();
+    return new CommonResponseDto(true, '전체 편지 조회 성공', letters);
   }
 
   @ApiOperation({
@@ -43,10 +44,11 @@ export class LettersController {
     description: '조회할 편지의 id 입력',
   })
   @Get('/:letterId')
-  getByLetterId(
+  async getByLetterId(
     @Param('letterId', ParseIntPipe) letterId: number,
-  ): Promise<Letter> {
-    return this.lettersService.getLetterById(letterId);
+  ): Promise<CommonResponseDto<Letter>> {
+    const letter = await this.lettersService.getLetterById(letterId);
+    return new CommonResponseDto(true, '상세 편지 조회 성공', letter);
   }
 
   @ApiOperation({
@@ -58,9 +60,12 @@ export class LettersController {
   })
   @Post()
   @UsePipes(ValidationPipe)
-  createLetter(@Body() createLetterDto: CreateLetterDto): Promise<Letter> {
+  async createLetter(
+    @Body() createLetterDto: CreateLetterDto,
+  ): Promise<CommonResponseDto<Letter>> {
     console.log(createLetterDto);
-    return this.lettersService.createLetter(createLetterDto);
+    const newLetter = await this.lettersService.createLetter(createLetterDto);
+    return new CommonResponseDto(true, '편지 생성 성공', newLetter);
   }
 
   @ApiOperation({
@@ -74,7 +79,9 @@ export class LettersController {
   @Delete('/:letterId')
   async deleteLetter(
     @Param('letterId', ParseIntPipe) letterId: number,
-  ): Promise<void> {
+  ): Promise<CommonResponseDto<null>> {
     await this.lettersService.deleteLetter(letterId);
+
+    return new CommonResponseDto(true, '편지 삭제 성공', null);
   }
 }

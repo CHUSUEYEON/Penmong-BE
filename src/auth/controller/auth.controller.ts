@@ -16,6 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { CommonResponseDto } from 'src/common/dto/common-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -33,7 +34,7 @@ export class AuthController {
   async signin(
     @Res({ passthrough: true }) res: Response,
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<CommonResponseDto<{ accessToken: string }>> {
     const { accessToken, refreshToken } =
       await this.authService.signin(authCredentialsDto);
 
@@ -46,7 +47,7 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { accessToken };
+    return new CommonResponseDto(true, '로그인 성공', { accessToken });
   }
 
   @ApiOperation({
@@ -62,7 +63,7 @@ export class AuthController {
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<CommonResponseDto<{ accessToken: string }>> {
     const { accessToken, refreshToken } = await this.authService.refresh(
       req.cookies.refreshToken,
     );
@@ -75,7 +76,7 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { accessToken };
+    return new CommonResponseDto(true, '토큰 갱신 성공', { accessToken });
   }
 
   @ApiOperation({
@@ -89,7 +90,10 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: '로그아웃 성공' })
   @Post('/logout')
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async logout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<CommonResponseDto<null>> {
     await this.authService.logout(req.cookies.refreshToken);
 
     // 쿠키 삭제
@@ -101,6 +105,6 @@ export class AuthController {
       maxAge: 0, //삭제
     });
 
-    return { message: '로그아웃 되었습니다.' };
+    return new CommonResponseDto(true, '로그아웃 성공', null);
   }
 }
