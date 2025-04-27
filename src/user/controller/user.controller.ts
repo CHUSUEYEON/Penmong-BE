@@ -10,6 +10,7 @@ import { User } from '../model/user.entity';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { CommonResponseDto } from 'src/common/dto/common-response.dto';
 
 @ApiTags('User')
 @Controller('users')
@@ -24,8 +25,11 @@ export class UserController {
     type: CreateUserDto,
   })
   @Post()
-  signup(@Body(ValidationPipe) createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.signup(createUserDto);
+  async signup(
+    @Body(ValidationPipe) createUserDto: CreateUserDto,
+  ): Promise<CommonResponseDto<User>> {
+    const user = await this.userService.signup(createUserDto);
+    return new CommonResponseDto(true, '회원가입 성공', user);
   }
 
   // @UseGuards(AuthGuard())
