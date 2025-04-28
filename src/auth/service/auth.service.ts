@@ -30,8 +30,10 @@ export class AuthService {
       const payload = { userId };
       const accessToken = this.jwtService.sign(payload);
       const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+      const salt = await brcypt.genSalt();
+      const hashRefreshToken = await brcypt.hash(refreshToken, salt);
 
-      user.userRefreshToken = refreshToken;
+      user.userRefreshToken = hashRefreshToken;
       await this.userRepository.saveRefreshToken(user);
 
       return { accessToken, refreshToken };
@@ -51,7 +53,11 @@ export class AuthService {
       });
 
       const user = await this.userRepository.findByUserId(payload.userId);
-      if (!user || user.userRefreshToken !== refreshToken)
+      const isCorrect = await brcypt.compare(
+        refreshToken,
+        user.userRefreshToken,
+      );
+      if (!user || !isCorrect)
         throw new UnauthorizedException('유효한 인증이 아닙니다.');
 
       const newAccessToken = this.jwtService.sign({ userId: user.userId });
@@ -59,8 +65,10 @@ export class AuthService {
         { userId: user.userId },
         { expiresIn: '7d' },
       );
+      const salt = await brcypt.genSalt();
+      const hashRefreshToken = await brcypt.hash(newRefreshToken, salt);
 
-      user.userRefreshToken = newRefreshToken;
+      user.userRefreshToken = hashRefreshToken;
       await this.userRepository.saveRefreshToken(user);
 
       return { accessToken: newAccessToken, refreshToken: newRefreshToken };
