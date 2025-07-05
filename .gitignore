@@ -70,3 +70,6 @@ result.log
 
 # env
 .env
+
+# postgresql
+postgresql_data
